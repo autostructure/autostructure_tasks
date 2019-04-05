@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/python
 
-# Puppet Task Name: 
+# Puppet Task Name:
 #
 # This is where you put the shell code for your task.
 #
@@ -26,3 +26,17 @@
 #   }
 # Learn more at: https://puppet.com/docs/bolt/0.x/writing_tasks.html#ariaid-title11
 #
+
+import json
+import sys
+import requests
+import os
+
+# Load task parameters
+params = json.load(sys.stdin)
+# email = params['email']
+
+query_url = "https://localhost:8080/pdb/query/v4"
+query = "?query=reports[certname]{latest_report? = true}"
+
+response = requests.get(query_url + query)
