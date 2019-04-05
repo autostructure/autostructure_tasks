@@ -31,6 +31,7 @@ import json
 import sys
 import requests
 import os
+import csv
 
 # Load task parameters
 params = json.load(sys.stdin)
@@ -43,5 +44,12 @@ uri = query_url + query
 
 # Get Response
 response = requests.get(uri, verify=False, headers={'X-Authentication': 'AMEB9PCp1KxHMxbHctkWaKy7M9TokFgrxWaR-zld52ny'})
-role_count = json.loads(response.text)
-print(role_count)
+role_count_json = json.loads(response.text)
+
+with open("/tmp/role_count.csv", "wb") as csvfile:
+    f = csv.writer(csvfile)
+    f.writerow(["Nodes", "Role"])
+    for data in role_count_json:
+        f.writerow([data["count"], data["title"]])
+
+print("Successfully created CSV file at /tmp/role_count.csv")
