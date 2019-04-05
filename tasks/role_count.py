@@ -43,4 +43,5 @@ uri = query_url + query
 
 # Get Response
 response = requests.get(uri, verify=False, headers={'X-Authentication': 'AMEB9PCp1KxHMxbHctkWaKy7M9TokFgrxWaR-zld52ny'})
-print("Response:", response.text)
+role_count = json.loads(response.text)
+print(role_count)
