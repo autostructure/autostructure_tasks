@@ -45,7 +45,7 @@ uri = query_url + query
 
 # Get JSON Response
 response = requests.get(uri, verify=False, headers={'X-Authentication': 'AMEB9PCp1KxHMxbHctkWaKy7M9TokFgrxWaR-zld52ny'})
-agent_count_json = json.loads(response.text)
+#agent_count_json = json.loads(response.text)
 
 # Convert JSON to CSV file
 # date = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
@@ -56,4 +56,4 @@ agent_count_json = json.loads(response.text)
 #     for data in role_count_json:
 #         f.writerow([data["title"], data["count"]])
 
-print("Response: ", agent_count_json)
+print("Response: ", response.text)
