@@ -36,7 +36,8 @@ import os
 params = json.load(sys.stdin)
 # email = params['email']
 
-query_url = "https://localhost:8080/pdb/query/v4"
-query = "?query=reports[certname]{latest_report? = true}"
+#query_url = "https://localhost:8080/pdb/query/v4"
+#query = "?query=reports[certname]{latest_report? = true}"
 
-response = requests.get(query_url + query)
+response = requests.get("https://localhost:8080/pdb/query/v4?query=reports[certname]{latest_report? = true}")
+print("Response:", response.text)
