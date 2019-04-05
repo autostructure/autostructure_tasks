@@ -32,6 +32,7 @@ import sys
 import requests
 import os
 import csv
+import datetime
 
 # Load task parameters
 params = json.load(sys.stdin)
@@ -42,11 +43,14 @@ query_url = "https://master.autostructure.io:8081/pdb/query/v4"
 query = "?query=%5B%22from%22%2C%22resources%22%2C%5B%22extract%22%2C%5B%5B%22function%22%2C%22count%22%5D%2C%22title%22%5D%2C%5B%22and%22%2C%5B%22%3D%22%2C%22type%22%2C%22Class%22%5D%2C%5B%22%7E%22%2C%22title%22%2C%22%5BRr%5Dole%22%5D%2C%5B%22subquery%22%2C%22nodes%22%2C%22certname%22%5D%5D%2C%5B%22group_by%22%2C%22title%22%5D%5D%5D"
 uri = query_url + query
 
-# Get Response
+# Get JSON Response
 response = requests.get(uri, verify=False, headers={'X-Authentication': 'AMEB9PCp1KxHMxbHctkWaKy7M9TokFgrxWaR-zld52ny'})
 role_count_json = json.loads(response.text)
 
-with open("/tmp/role_count.csv", "wb") as csvfile:
+# Convert JSON to CSV file
+date = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+file = "/tmp/role_count_" + date + ".csv"
+with open(file, "wb") as csvfile:
     f = csv.writer(csvfile)
     f.writerow(["Role", "Nodes"])
     for data in role_count_json:
