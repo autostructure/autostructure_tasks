@@ -40,7 +40,7 @@ params = json.load(sys.stdin)
 
 # Variables
 query_url = "https://master.autostructure.io:8081/pdb/query/v4"
-query = "%5B%22from%22%2C%22facts%22%2C%5B%22extract%22%2C%5B%22clientcert%22%2C%22value%22%5D%2C%5B%22%3D%22%2C%22name%22%2C%22certificate_age%22%5D%5D%5D"
+query = "?query=%5B%22from%22%2C%22facts%22%2C%5B%22extract%22%2C%5B%22clientcert%22%2C%22value%22%5D%2C%5B%22%3D%22%2C%22name%22%2C%22certificate_age%22%5D%5D%5D"
 uri = query_url + query
 
 # Get JSON Response
