@@ -39,5 +39,5 @@ params = json.load(sys.stdin)
 #query_url = "https://localhost:8080/pdb/query/v4"
 #query = "?query=reports[certname]{latest_report? = true}"
 
-response = requests.get("https://localhost:8080/pdb/query/v4%3Fquery%3Dreports%5Bcertname%5D%7Blatest_report%3F+%3D+true%7D")
+response = requests.get("http://localhost:8080/pdb/query/v4%3Fquery%3Dreports%5Bcertname%5D%7Blatest_report%3F+%3D+true%7D")
 print("Response:", response.text)
