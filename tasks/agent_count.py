@@ -1,4 +1,4 @@
-#!/bin/python
+#!/bin/sh
 
 # Puppet Task Name:
 #
@@ -40,20 +40,20 @@ params = json.load(sys.stdin)
 
 # Variables
 query_url = "https://master.autostructure.io:8081/pdb/query/v4"
-query = "?query=%5B%22from%22%2C%22resources%22%2C%5B%22extract%22%2C%5B%5B%22function%22%2C%22count%22%5D%2C%22title%22%5D%2C%5B%22and%22%2C%5B%22%3D%22%2C%22type%22%2C%22Class%22%5D%2C%5B%22%7E%22%2C%22title%22%2C%22%5BRr%5Dole%22%5D%2C%5B%22subquery%22%2C%22nodes%22%2C%22certname%22%5D%5D%2C%5B%22group_by%22%2C%22title%22%5D%5D%5D"
+query = "%5B%22from%22%2C%22facts%22%2C%5B%22extract%22%2C%5B%22certname%22%2C%22value%22%5D%2C%5B%22%3D%22%2C%22name%22%2C%22certificate_age%22%5D%5D%5D"
 uri = query_url + query
 
 # Get JSON Response
 response = requests.get(uri, verify=False, headers={'X-Authentication': 'AMEB9PCp1KxHMxbHctkWaKy7M9TokFgrxWaR-zld52ny'})
-role_count_json = json.loads(response.text)
+agent_count_json = json.loads(response.text)
 
 # Convert JSON to CSV file
-date = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-file = "/tmp/role_count_" + date + ".csv"
-with open(file, "wb") as csvfile:
-    f = csv.writer(csvfile)
-    f.writerow(["Role", "Nodes"])
-    for data in role_count_json:
-        f.writerow([data["title"], data["count"]])
+# date = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+# file = "/tmp/role_count_" + date + ".csv"
+# with open(file, "wb") as csvfile:
+#     f = csv.writer(csvfile)
+#     f.writerow(["Role", "Nodes"])
+#     for data in role_count_json:
+#         f.writerow([data["title"], data["count"]])
 
-print("Successfully created CSV file at ", file)
+print("Response: ", agent_count_json)
