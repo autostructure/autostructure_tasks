@@ -39,5 +39,5 @@ params = json.load(sys.stdin)
 #query_url = "https://localhost:8080/pdb/query/v4"
 #query = "?query=reports[certname]{latest_report? = true}"
 
-response = requests.get("https://localhost:8081/pdb/query/v4%3Fquery%3Dreports%5Bcertname%5D%7Blatest_report%3F+%3D+true%7D", verify=False, headers={'X-Authentication': 'AMEB9PCp1KxHMxbHctkWaKy7M9TokFgrxWaR-zld52ny'})
+response = requests.get("https://localhost:8081/pdb/query/v4?query=inventory%5Bcertname%2C%20trusted%5D%7B%7D", verify=False, headers={'X-Authentication': 'AMEB9PCp1KxHMxbHctkWaKy7M9TokFgrxWaR-zld52ny'})
 print("Response:", response.text)
