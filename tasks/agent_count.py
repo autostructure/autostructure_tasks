@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/python
 
 # Puppet Task Name:
 #
