@@ -38,6 +38,39 @@ params = json.load(sys.stdin)
 
 #query_url = "https://localhost:8080/pdb/query/v4"
 #query = "?query=reports[certname]{latest_report? = true}"
+# What Bill gave me:
+# data = {
+#   "query":["from", "resources",
+#     ["extract", [["function", "count"], "title"],
+#       ["and",
+#         ["=", "type", "Class"],
+#         ["~", "title", "[Rr]ole"],
+#         ["subquery", "nodes", "certname"]
+#       ],
+#       ["group_by", "title"]
+#     ]
+#   ]
+# }
+# data = {"query":["from","resources",["extract",[["function","count"],"title"],["and",["=","type","Class"],["~","title","[Rr]ole"],["subquery","nodes","certname"]],["group_by","title"]]]}
+#
+# # Modified:
+# data = {
+#   resources[count(), title]{ group by title}
+#     ["extract", [["function", "count"], "title"],
+#       ["and",
+#         ["=", "type", "Class"],
+#         ["~", "title", "[Rr]ole"],
+#         ["subquery", "nodes", "certname"]
+#       ],
+#       ["group_by", "title"]
+#     ]
+#   ]
+# }
+# data = {
+# resources[]
+# }
+#data = {"query":["from","resources",["extract",[["function","count"],"title"],["and",["=","type","Class"],["~","title","[Rr]ole"],["subquery","nodes","certname"]],["group_by","title"]]]}
 
-response = requests.get("https://localhost:8081/pdb/query/v4?query=inventory%5Bcertname%2C%20trusted%5D%7B%7D", verify=False, headers={'X-Authentication': 'AMEB9PCp1KxHMxbHctkWaKy7M9TokFgrxWaR-zld52ny'})
+
+response = requests.get("https://localhost:8081/pdb/query/v4?query=query=%5B%22from%22%2C%22resources%22%2C%5B%22extract%22%2C%5B%5B%22function%22%2C%22count%22%5D%2C%22title%22%5D%2C%5B%22and%22%2C%5B%22%3D%22%2C%22type%22%2C%22Class%22%5D%2C%5B%22%7E%22%2C%22title%22%2C%22%5BRr%5Dole%22%5D%2C%5B%22subquery%22%2C%22nodes%22%2C%22certname%22%5D%5D%2C%5B%22group_by%22%2C%22title%22%5D%5D%5D", verify=False, headers={'X-Authentication': 'AMEB9PCp1KxHMxbHctkWaKy7M9TokFgrxWaR-zld52ny'})
 print("Response:", response.text)
