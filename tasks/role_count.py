@@ -48,8 +48,8 @@ role_count_json = json.loads(response.text)
 
 with open("/tmp/role_count.csv", "wb") as csvfile:
     f = csv.writer(csvfile)
-    f.writerow(["Nodes", "Role"])
+    f.writerow(["Role", "Nodes"])
     for data in role_count_json:
-        f.writerow([data["count"], data["title"]])
+        f.writerow([data["title"], data["count"]])
 
 print("Successfully created CSV file at /tmp/role_count.csv")
