@@ -96,7 +96,7 @@ agent_count_json = json.loads(response.text)
 
 early_year = '2019'
 for i in agent_count_json:
-    if i.['value']['year'] < early_year:
+    if i['value']['year'] < early_year:
         early_year = i['value']['year']
 
 
