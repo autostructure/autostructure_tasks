@@ -33,6 +33,37 @@ import requests
 import os
 import csv
 import datetime
+import smtplib
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEBase import MIMEBase
+from email.MIMEText import MIMEText
+from email.Utils import COMMASPACE, formatdate
+from email import Encoders
+
+# Define a sendMail function to send emails later
+def sendMail(to, fro, subject, text, files=[],server="localhost"):
+    assert type(to)==list
+    assert type(files)==list
+
+    msg = MIMEMultipart()
+    msg['From'] = fro
+    msg['To'] = COMMASPACE.join(to)
+    msg['Date'] = formatdate(localtime=True)
+    msg['Subject'] = subject
+
+    msg.attach( MIMEText(text) )
+
+    for file in files:
+        part = MIMEBase('application', "octet-stream")
+        part.set_payload( open(file,"rb").read() )
+        Encoders.encode_base64(part)
+        part.add_header('Content-Disposition', 'attachment; filename="%s"'
+                       % os.path.basename(file))
+        msg.attach(part)
+
+    smtp = smtplib.SMTP(server)
+    smtp.sendmail(fro, to, msg.as_string() )
+    smtp.close()
 
 # Load task parameters
 params = json.load(sys.stdin)
@@ -55,5 +86,7 @@ with open(file, "wb") as csvfile:
     f.writerow(["Role", "Nodes"])
     for data in role_count_json:
         f.writerow([data["title"], data["count"]])
+
+sendMail(['Jack Coleman <jackclmn@umich.edu>'],'Puppet Report <centos-template@autostructure.io>','Hello Python!','Heya buddy! Say hello to Python! :)',[file])
 
 print("Successfully created CSV file at ", file)
