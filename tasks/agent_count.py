@@ -98,9 +98,11 @@ agent_count_json = json.loads(response.text)
 early_year = datetime.datetime.now().year
 early_month = datetime.datetime.now().month
 for i in agent_count_json:
-    if i['value']['year'] <= early_year:
+    if i['value']['year'] < early_year:
         early_year = i['value']['year']
-        if i['value']['month'] <= early_month:
+        early_month = i['value']['month']
+    if i['value']['year'] == early_year:
+        if i['value']['month'] < early_month:
             early_month = i['value']['month']
 
 
