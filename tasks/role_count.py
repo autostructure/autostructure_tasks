@@ -87,6 +87,6 @@ with open(file, "wb") as csvfile:
     for data in role_count_json:
         f.writerow([data["title"], data["count"]])
 
-sendMail(['Jack Coleman <jackclmn@umich.edu>'],'Puppet Report <centos-template@autostructure.io>','Hello Python!','Heya buddy! Say hello to Python! :)',[file])
+sendMail(['Jack Coleman <john.coleman545@gmail.edu>'],'Puppet Report <centos-template@autostructure.io>','Hello Python!','Heya buddy! Say hello to Python! :)',[file])
 
 print("Successfully created CSV file at ", file)
