@@ -114,4 +114,4 @@ for i in agent_count_json:
 #     for data in role_count_json:
 #         f.writerow([data["title"], data["count"]])
 
-print("Early_year: ", early_year)
+print("Early_year: ", early_year, "Early month: ", early_month)
