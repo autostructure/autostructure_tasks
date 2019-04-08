@@ -93,19 +93,24 @@ uri = query_url + query
 response = requests.get(uri, verify=False, headers={'X-Authentication': '0P0L-KwvYTVgy_NcOhQRN4Lw95fB7ibShVyxqd43BMIU'})
 agent_count_json = json.loads(response.text)
 
+# Import JSON as a Dataframe
 df = pd.DataFrame.from_dict(json_normalize(agent_count_json), orient ='columns')
 
+# Create new dataframe with the columns we want
 df2 = pd.DataFrame()
 df2['Month'] = df['value.month']
 df2['Year'] = df['value.year']
 df2['Agents'] = df['certname']
 df2 = df2.groupby(by=['Month','Year'], as_index=False).agg({'Agents': pd.Series.nunique})
 
+#Convert numbers to month abbreviations for clarity
 look_up = { 1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May',
             6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
 
 df2['Month'] = df2['Month'].apply(lambda x: look_up[x])
+df2.sort_values(by='Year', ascending=False)
 
+#Convert Dataframe into CSV
 date = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 file = "/tmp/agent_count_" + date + ".csv"
 
