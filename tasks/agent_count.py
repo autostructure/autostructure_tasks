@@ -44,7 +44,7 @@ query = "?query=%5B%22from%22%2C%22facts%22%2C%5B%22extract%22%2C%5B%22certname%
 uri = query_url + query
 
 # Get JSON Response
-response = requests.get(uri, verify=False, headers={'X-Authentication': 'AMEB9PCp1KxHMxbHctkWaKy7M9TokFgrxWaR-zld52ny'})
+response = requests.get(uri, verify=False, headers={'X-Authentication': '0P0L-KwvYTVgy_NcOhQRN4Lw95fB7ibShVyxqd43BMIU'})
 #agent_count_json = json.loads(response.text)
 
 # Convert JSON to CSV file
