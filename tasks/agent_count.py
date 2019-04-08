@@ -96,9 +96,11 @@ agent_count_json = json.loads(response.text)
 
 # Find the first month an agent was installed so we have the starting point for our CSV file
 early_year = datetime.datetime.now().year
+early_month = datetime.datetime.now().month
 for i in agent_count_json:
-    if i['value']['year'] < early_year:
+    if i['value']['year'] <= early_year and i['value']['month'] <= early_month:
         early_year = i['value']['year']
+        early_month = i['value']['month']
 
 
 
