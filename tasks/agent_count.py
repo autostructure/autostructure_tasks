@@ -92,7 +92,14 @@ uri = query_url + query
 
 # Get JSON Response
 response = requests.get(uri, verify=False, headers={'X-Authentication': '0P0L-KwvYTVgy_NcOhQRN4Lw95fB7ibShVyxqd43BMIU'})
-#agent_count_json = json.loads(response.text)
+agent_count_json = json.loads(response.text)
+
+early_year = '2019'
+for i in agent_count_json:
+    if i.['value']['year'] < early_year:
+        early_year = i['value']['year']
+
+
 
 # Convert JSON to CSV file
 # date = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
@@ -103,4 +110,4 @@ response = requests.get(uri, verify=False, headers={'X-Authentication': '0P0L-Kw
 #     for data in role_count_json:
 #         f.writerow([data["title"], data["count"]])
 
-print("Response: ", response.text)
+print("Early_year: ", early_year)
