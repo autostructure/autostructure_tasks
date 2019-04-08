@@ -94,7 +94,8 @@ uri = query_url + query
 response = requests.get(uri, verify=False, headers={'X-Authentication': '0P0L-KwvYTVgy_NcOhQRN4Lw95fB7ibShVyxqd43BMIU'})
 agent_count_json = json.loads(response.text)
 
-early_year = '2019'
+# Find the first month an agent was installed so we have the starting point for our CSV file
+early_year = datatime.now().year
 for i in agent_count_json:
     if i['value']['year'] < early_year:
         early_year = i['value']['year']
