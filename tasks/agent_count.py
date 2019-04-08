@@ -93,7 +93,6 @@ uri = query_url + query
 response = requests.get(uri, verify=False, headers={'X-Authentication': '0P0L-KwvYTVgy_NcOhQRN4Lw95fB7ibShVyxqd43BMIU'})
 agent_count_json = json.loads(response.text)
 
-<<<<<<< HEAD
 df = pd.DataFrame.from_dict(json_normalize(agent_count_json), orient ='columns')
 
 df2 = pd.DataFrame()
@@ -106,26 +105,8 @@ look_up = { 1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May',
             6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
 
 df2['Month'] = df2['Month'].apply(lambda x: look_up[x])
-=======
-# Find the first month an agent was installed so we have the starting point for our CSV file
-early_year = datetime.datetime.now().year
-early_month = datetime.datetime.now().month
-for i in agent_count_json:
-    if i['value']['year'] < early_year:
-        early_year = i['value']['year']
-        early_month = i['value']['month']
-    if i['value']['year'] == early_year:
-        if i['value']['month'] < early_month:
-            early_month = i['value']['month']
-
-
->>>>>>> 9fc6667d6b8cd3563b22a13654fdbc45113838a8
 
 date = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 file = "/tmp/agent_count_" + date + ".csv"
 
-<<<<<<< HEAD
 df2.to_csv(path_or_buf=file)
-=======
-print("Early_year: ", early_year, "Early month: ", early_month)
->>>>>>> 9fc6667d6b8cd3563b22a13654fdbc45113838a8
