@@ -27,6 +27,53 @@
 # Learn more at: https://puppet.com/docs/bolt/0.x/writing_tasks.html#ariaid-title11
 #
 
+# Based on the following data:
+# [
+# {"certname":"box150.autostructure.io","value":{"day":9,"year":2019,"month":3}},
+# {"certname":"manager001.autostructure.io","value":{"day":12,"year":2018,"month":12}},
+# {"certname":"splunk.autostructure.io","value":{"day":25,"year":2019,"month":3}},
+# {"certname":"nfs001.autostructure.io","value":{"day":4,"year":2019,"month":1}},
+# {"certname":"manager004.autostructure.io","value":{"day":10,"year":2019,"month":1}},
+# {"certname":"master.autostructure.io","value":{"day":18,"year":2019,"month":3}},
+# {"certname":"win-0kk9knd43u1","value":{"day":6,"year":2019,"month":3}},
+# {"certname":"nameserver.autostructure.io","value":{"day":19,"year":2018,"month":1}},
+# {"certname":"worker003.autostructure.io","value":{"day":12,"year":2018,"month":12}},
+# {"certname":"worker005.autostructure.io","value":{"day":3,"year":2019,"month":1}},
+# {"certname":"worker001.autostructure.io","value":{"day":12,"year":2018,"month":12}},
+# {"certname":"rp.autostructure.io","value":{"day":27,"year":2017,"month":3}},
+# {"certname":"cdpe-hardware-23.autostructure.io","value":{"day":8,"year":2019,"month":3}},
+# {"certname":"manager003.autostructure.io","value":{"day":12,"year":2018,"month":12}}
+# ]
+#
+# We should get a CSV like this:
+# Month, Agents Installed
+# March 2017, 1
+# April 2017, 0
+# May 2017, 0
+# June 2017, 0
+# July 2017, 0
+# August 2017, 0
+# September 2017, 0
+# October 2017, 0
+# November 2017, 0
+# December 2017, 0
+# January 2018, 1
+# February 2018, 0
+# March 2018, 0
+# April 2018, 0
+# May 2018, 0
+# June 2018, 0
+# July 2018, 0
+# August 2018, 0
+# September 2018, 0
+# October 2018, 0
+# November 2018, 0
+# December 2018, 4
+# January 2019, 3
+# February 2019, 0
+# March 2019, 5
+
+
 import json
 import sys
 import requests
