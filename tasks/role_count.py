@@ -1,31 +1,9 @@
 #!/bin/python
 
-# Puppet Task Name:
-#
-# This is where you put the shell code for your task.
-#
-# You can write Puppet tasks in any language you want and it's easy to
-# adapt an existing Python, PowerShell, Ruby, etc. script. Learn more at:
-# https://puppet.com/docs/bolt/0.x/writing_tasks.html
-#
-# Puppet tasks make it easy for you to enable others to use your script. Tasks
-# describe what it does, explains parameters and which are required or optional,
-# as well as validates parameter type. For examples, if parameter "instances"
-# must be an integer and the optional "datacenter" parameter must be one of
-# portland, sydney, belfast or singapore then the .json file
-# would include:
-#   "parameters": {
-#     "instances": {
-#       "description": "Number of instances to create",
-#       "type": "Integer"
-#     },
-#     "datacenter": {
-#       "description": "Datacenter where instances will be created",
-#       "type": "Enum[portland, sydney, belfast, singapore]"
-#     }
-#   }
-# Learn more at: https://puppet.com/docs/bolt/0.x/writing_tasks.html#ariaid-title11
-#
+# Puppet Task Name: role_count
+# Language: Python
+# Created By: Jack Coleman
+# Last MOdified: 4/9/2019
 
 import json
 import sys
@@ -40,7 +18,7 @@ from email.MIMEText import MIMEText
 from email.Utils import COMMASPACE, formatdate
 from email import Encoders
 
-# Define a sendMail function to send emails later
+# This function will send emails with attachments
 def sendMail(to, fro, subject, text, files=[],server="localhost"):
     assert type(to)==list
     assert type(files)==list
@@ -65,20 +43,62 @@ def sendMail(to, fro, subject, text, files=[],server="localhost"):
     smtp.sendmail(fro, to, msg.as_string() )
     smtp.close()
 
-# Load task parameters
+# Variables
 params = json.load(sys.stdin)
 email_to = params['email']
-
-# Variables
 query_url = "https://master.autostructure.io:8081/pdb/query/v4"
 query = "?query=%5B%22from%22%2C%22resources%22%2C%5B%22extract%22%2C%5B%5B%22function%22%2C%22count%22%5D%2C%22title%22%5D%2C%5B%22and%22%2C%5B%22%3D%22%2C%22type%22%2C%22Class%22%5D%2C%5B%22%7E%22%2C%22title%22%2C%22%5BRr%5Dole%22%5D%2C%5B%22subquery%22%2C%22nodes%22%2C%22certname%22%5D%5D%2C%5B%22group_by%22%2C%22title%22%5D%5D%5D"
 uri = query_url + query
 
-# Get JSON Response
-response = requests.get(uri, verify=False, headers={'X-Authentication': '0P0L-KwvYTVgy_NcOhQRN4Lw95fB7ibShVyxqd43BMIU'})
+# This section generates a token for authentication
+login = {'login':params['user'],'password':params['password']}
+token_url = 'https://master.autostructure.io:4433/rbac-api/v1/auth/token'
+try:
+    token_response = requests.post(token_url,json=login,verify=False)
+    token_response.raise_for_status()
+except requests.exceptions.ConnectionError as Connerr:
+    print("A connection error occurred:",Connerr)
+    sys.exit(1)
+except requests.exceptions.HTTPError as HTTPerr:
+    print("An HTTP Error occurred:",HTTPerr)
+    sys.exit(1)
+except requests.exceptions.Timeout as Timeerr:
+    print("A timeout error occurred:",Timeerr)
+    sys.exit(1)
+except requests.exceptions.RequestException as Requesterr:
+    print("An error occurred:",Requesterr)
+    sys.exit(1)
+if (token_response.ok):
+    print(Authentication token generated successfully")
+    print("HTTP Status Code: ",token_response.status_code)
+token_json = json.loads(token_response.text)
+token = token_json['token']
+
+# This section requests the PuppetDB for JSON data on the count of nodes classified with each role
+try:
+    response = requests.get(uri, verify=False, headers={'X-Authentication':token})
+    response.raise_for_status()
+except requests.exceptions.ConnectionError as Connerr:
+    print("A connection error occurred:",Connerr)
+    sys.exit(1)
+except requests.exceptions.HTTPError as HTTPerr:
+    print("An HTTP Error occurred:",HTTPerr)
+    sys.exit(1)
+except requests.exceptions.Timeout as Timeerr:
+    print("A timeout error occurred:",Timeerr)
+    sys.exit(1)
+except requests.exceptions.RequestException as Requesterr:
+    print("An error occurred:",Requesterr)
+    sys.exit(1)
+if(response.ok):
+    print("Data successfully retrieved from PuppetDB")
+    print("HTTP Status Code:",response.status_code)
+else:
+    print("Data not successfully retrieved from PuppetDB")
+    print("HTTP Status Code:",response.status_code)
 role_count_json = json.loads(response.text)
 
-# Convert JSON to CSV file
+# Convert the JSON data to CSV format and save in a temporary file
 date = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 file = "/tmp/role_count_" + date + ".csv"
 with open(file, "wb") as csvfile:
@@ -87,9 +107,10 @@ with open(file, "wb") as csvfile:
     for data in role_count_json:
         f.writerow([data["title"], data["count"]])
 
-sendMail([email_to],'Puppet Report <centos-template@autostructure.io>','Hello Python!','Heya buddy! Say hello to Python! :)',[file])
-
-# Clean up file after sending the email
-os.remove(file)
-
+# Send an email with the CSV file attached
+sendMail([email_to],'Puppet Report <centos-template@autostructure.io>','Puppet role_count Task Results','Attached is the role_count report that was requests in a Puppet Task.',[file])
 print("Successfully emailed CSV file to ", email_to)
+
+# Clean up temporary CSV file after sending the email
+os.remove(file)
+print("Cleaned up temporary files")
