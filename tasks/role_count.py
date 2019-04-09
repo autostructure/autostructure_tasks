@@ -69,7 +69,7 @@ except requests.exceptions.RequestException as Requesterr:
     print("An error occurred:",Requesterr)
     sys.exit(1)
 if (token_response.ok):
-    print(Authentication token generated successfully")
+    print("Authentication token generated successfully")
     print("HTTP Status Code: ",token_response.status_code)
 token_json = json.loads(token_response.text)
 token = token_json['token']
