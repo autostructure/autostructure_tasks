@@ -3,5 +3,9 @@
   "supports_noop": false,
   "description": "A short description of this task",
   "parameters": {
+    "email": {
+      "description": "The email to send the report to.",
+      "type": "String"
+    }
   }
 }

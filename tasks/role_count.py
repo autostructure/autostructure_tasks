@@ -67,7 +67,7 @@ def sendMail(to, fro, subject, text, files=[],server="localhost"):
 
 # Load task parameters
 params = json.load(sys.stdin)
-# email = params['email']
+email_to = params['email']
 
 # Variables
 query_url = "https://master.autostructure.io:8081/pdb/query/v4"
@@ -87,6 +87,9 @@ with open(file, "wb") as csvfile:
     for data in role_count_json:
         f.writerow([data["title"], data["count"]])
 
-sendMail(['Jack Coleman <john.coleman545@gmail.com>'],'Puppet Report <centos-template@autostructure.io>','Hello Python!','Heya buddy! Say hello to Python! :)',[file])
+sendMail([email_to],'Puppet Report <centos-template@autostructure.io>','Hello Python!','Heya buddy! Say hello to Python! :)',[file])
 
-print("Successfully created CSV file at ", file)
+# Clean up file after sending the email
+os.remove(file)
+
+print("Successfully emailed CSV file to ", email_to)
