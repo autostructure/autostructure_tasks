@@ -110,13 +110,13 @@ look_up = { 1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May',
             6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
 
 df2['Month'] = df2['Month'].apply(lambda x: look_up[x])
-df2.sort_values(by='Year', ascending=False)
+Final = df2.sort_values(by='Year', ascending=False)
 
 #Convert Dataframe into CSV
 date = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 file = "/tmp/agent_count_" + date + ".csv"
 
-df2.to_csv(path_or_buf=file)
+Final.to_csv(path_or_buf=file)
 
 # Send an email with the CSV file attached
 sendMail([email_to],'Puppet Report <centos-template@autostructure.io>','Puppet agent_count Task Results','Attached is the agent_count report that was requests in a Puppet Task.',[file])
