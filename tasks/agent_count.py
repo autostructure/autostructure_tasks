@@ -14,9 +14,7 @@ from email.MIMEBase import MIMEBase
 from email.MIMEText import MIMEText
 from email.Utils import COMMASPACE, formatdate
 from email import Encoders
-import sorted_months_weekdays
-import sort_dataframeby_monthorweek
-import itertools
+
 # This function will send emails with attachments
 def sendMail(to, fro, subject, text, files=[],server="localhost"):
     assert type(to)==list
@@ -111,9 +109,10 @@ df2 = df2.groupby(by=['Month','Year'], as_index=False).agg({'Agents': pd.Series.
 look_up = { 1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May',
             6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
 
-df2['Month'] = df2['Month'].apply(lambda x: look_up[x])
-df_sort = sort_dataframeby_monthorweek.Sort_Dataframeby_Month(df=df2,monthcolumnname='Month')
-Final = df_sort.sort_values(by='Year', ascending=False)
+df_sort_month = df2.sort_values(by='Month', ascending=False)
+df_sort_month['Month'] = df_sort_month['Month'].apply(lambda x: look_up[x])
+#df_sort = sort_dataframeby_monthorweek.Sort_Dataframeby_Month(df=df2,monthcolumnname='Month')
+Final = df_sort_month.sort_values(by='Year', ascending=False)
 
 #Convert Dataframe into CSV
 date = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
