@@ -82,15 +82,66 @@ import csv
 import datetime
 import pandas as pd
 from pandas.io.json import json_normalize
-# email = params['email']
+import smtplib
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEBase import MIMEBase
+from email.MIMEText import MIMEText
+from email.Utils import COMMASPACE, formatdate
+from email import Encoders
 
 # Variables
+params = json.load(sys.stdin)
+email_to = params['email']
 query_url = "https://master.autostructure.io:8081/pdb/query/v4"
 query = "?query=%5B%22from%22%2C%22facts%22%2C%5B%22extract%22%2C%5B%22certname%22%2C%22value%22%5D%2C%5B%22%3D%22%2C%22name%22%2C%22certificate_age%22%5D%5D%5D"
 uri = query_url + query
 
-# Get JSON Response
-response = requests.get(uri, verify=False, headers={'X-Authentication': '0P0L-KwvYTVgy_NcOhQRN4Lw95fB7ibShVyxqd43BMIU'})
+# This section generates a token for authentication
+login = {'login':params['user'],'password':params['password']}
+token_url = 'https://master.autostructure.io:4433/rbac-api/v1/auth/token'
+try:
+    token_response = requests.post(token_url,json=login,verify=False)
+    token_response.raise_for_status()
+except requests.exceptions.ConnectionError as Connerr:
+    print("A connection error occurred:",Connerr)
+    sys.exit(1)
+except requests.exceptions.HTTPError as HTTPerr:
+    print("An HTTP Error occurred:",HTTPerr)
+    sys.exit(1)
+except requests.exceptions.Timeout as Timeerr:
+    print("A timeout error occurred:",Timeerr)
+    sys.exit(1)
+except requests.exceptions.RequestException as Requesterr:
+    print("An error occurred:",Requesterr)
+    sys.exit(1)
+if (token_response.ok):
+    print("Authentication token generated successfully")
+    print("HTTP Status Code: ",token_response.status_code)
+token_json = json.loads(token_response.text)
+token = token_json['token']
+
+# This section requests the PuppetDB for JSON data on each node's certificate_age fact
+try:
+    response = requests.get(uri, verify=False, headers={'X-Authentication':token})
+    response.raise_for_status()
+except requests.exceptions.ConnectionError as Connerr:
+    print("A connection error occurred:",Connerr)
+    sys.exit(1)
+except requests.exceptions.HTTPError as HTTPerr:
+    print("An HTTP Error occurred:",HTTPerr)
+    sys.exit(1)
+except requests.exceptions.Timeout as Timeerr:
+    print("A timeout error occurred:",Timeerr)
+    sys.exit(1)
+except requests.exceptions.RequestException as Requesterr:
+    print("An error occurred:",Requesterr)
+    sys.exit(1)
+if(response.ok):
+    print("Data successfully retrieved from PuppetDB")
+    print("HTTP Status Code:",response.status_code)
+else:
+    print("Data not successfully retrieved from PuppetDB")
+    print("HTTP Status Code:",response.status_code)
 agent_count_json = json.loads(response.text)
 
 # Import JSON as a Dataframe
@@ -115,3 +166,11 @@ date = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 file = "/tmp/agent_count_" + date + ".csv"
 
 df2.to_csv(path_or_buf=file)
+
+# Send an email with the CSV file attached
+sendMail([email_to],'Puppet Report <centos-template@autostructure.io>','Puppet agent_count Task Results','Attached is the agent_count report that was requests in a Puppet Task.',[file])
+print("Successfully emailed CSV file to ", email_to)
+
+# Clean up temporary CSV file after sending the email
+os.remove(file)
+print("Cleaned up temporary files")
