@@ -118,7 +118,7 @@ Final = df_sort_month.sort_values(by='Year', ascending=False)
 date = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 file = "/tmp/agent_count_" + date + ".csv"
 
-Final.to_csv(path_or_buf=file)
+Final.to_csv(path_or_buf=file,index=False)
 
 # Send an email with the CSV file attached
 sendMail([email_to],'Puppet Report <centos-template@autostructure.io>','Puppet agent_count Task Results','Attached is the agent_count report that was requests in a Puppet Task.',[file])
