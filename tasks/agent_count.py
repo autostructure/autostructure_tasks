@@ -101,8 +101,8 @@ try:
 
     # Create new dataframe with the columns we want
     df2 = pd.DataFrame()
-    df2['Month'] = df['value.month']
-    df2['Year'] = df['value.year']
+    df2['Month'] = df['value'][':month']
+    df2['Year'] = df['value'][':year']
     df2['Agents'] = df['certname']
     df2 = df2.groupby(by=['Month','Year'], as_index=False).agg({'Agents': pd.Series.nunique})
 
