@@ -95,35 +95,39 @@ else:
     print("HTTP Status Code:",response.status_code)
 agent_count_json = json.loads(response.text)
 
-# Import JSON as a Dataframe
-df = pd.DataFrame.from_dict(json_normalize(agent_count_json), orient ='columns')
+try:
+    # Import JSON as a Dataframe
+    df = pd.DataFrame.from_dict(json_normalize(agent_count_json), orient ='columns')
 
-# Create new dataframe with the columns we want
-df2 = pd.DataFrame()
-df2['Month'] = df['value.month']
-df2['Year'] = df['value.year']
-df2['Agents'] = df['certname']
-df2 = df2.groupby(by=['Month','Year'], as_index=False).agg({'Agents': pd.Series.nunique})
+    # Create new dataframe with the columns we want
+    df2 = pd.DataFrame()
+    df2['Month'] = df['value.month']
+    df2['Year'] = df['value.year']
+    df2['Agents'] = df['certname']
+    df2 = df2.groupby(by=['Month','Year'], as_index=False).agg({'Agents': pd.Series.nunique})
 
-#Convert numbers to month abbreviations for clarity
-look_up = { 1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May',
-            6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
+    #Convert numbers to month abbreviations for clarity
+    look_up = { 1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May',
+                6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
 
-df_sort_month = df2.sort_values(by='Month', ascending=False)
-df_sort_month['Month'] = df_sort_month['Month'].apply(lambda x: look_up[x])
-#df_sort = sort_dataframeby_monthorweek.Sort_Dataframeby_Month(df=df2,monthcolumnname='Month')
-Final = df_sort_month.sort_values(by='Year', ascending=False)
+    df_sort_month = df2.sort_values(by='Month', ascending=False)
+    df_sort_month['Month'] = df_sort_month['Month'].apply(lambda x: look_up[x])
+    #df_sort = sort_dataframeby_monthorweek.Sort_Dataframeby_Month(df=df2,monthcolumnname='Month')
+    Final = df_sort_month.sort_values(by='Year', ascending=False)
 
-#Convert Dataframe into CSV
-date = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-file = "/tmp/agent_count_" + date + ".csv"
+    #Convert Dataframe into CSV
+    date = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    file = "/tmp/agent_count_" + date + ".csv"
 
-Final.to_csv(path_or_buf=file,index=False)
+    Final.to_csv(path_or_buf=file,index=False)
+except Exception as e:
+    print("Error creating dataframe: " + str(e))
+    sys.exit(1)
 
 # Send an email with the CSV file attached
 sendMail([email_to],'Puppet Report <centos-template@autostructure.io>','Puppet agent_count Task Results','Attached is the agent_count report that was requests in a Puppet Task.',[file])
 print("Successfully emailed CSV file to ", email_to)
 
 # Clean up temporary CSV file after sending the email
-os.remove(file)
-print("Cleaned up temporary files")
+# os.remove(file)
+# print("Cleaned up temporary files")
