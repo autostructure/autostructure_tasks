@@ -13,7 +13,7 @@ Facter.add('auto_certificate_age') do
       }
       fact_file = YAML::Store.new("#{facter_dir}/birthday.yaml")
       fact_file.transaction do
-        fact_file['certificate_age'] = time_hash
+        fact_file['auto_certificate_age'] = time_hash
       end
     end
   end
