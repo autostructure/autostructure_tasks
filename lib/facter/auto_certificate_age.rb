@@ -7,9 +7,9 @@ Facter.add('auto_certificate_age') do
     unless File.exist?("#{facter_dir}/birthday.yaml")
       creation_time = File.ctime("#{Facter.value(:puppet_ssldir)}/certs/#{Facter.value(:fqdn)}.pem")
       time_hash = {
-        year: creation_time.year,
-        month: creation_time.month,
-        day: creation_time.day,
+        'year' => creation_time.year,
+        'month' => creation_time.month,
+        'day' => creation_time.day,
       }
       fact_file = YAML::Store.new("#{facter_dir}/birthday.yaml")
       fact_file.transaction do
