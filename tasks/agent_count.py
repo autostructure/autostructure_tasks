@@ -44,7 +44,7 @@ def sendMail(to, fro, subject, text, files=[],server="localhost"):
 params = json.load(sys.stdin)
 email_to = params['email']
 query_url = "https://master.autostructure.io:8081/pdb/query/v4"
-query = "?query=%5B%22from%22%2C%22facts%22%2C%5B%22extract%22%2C%5B%22certname%22%2C%22value%22%5D%2C%5B%22%3D%22%2C%22name%22%2C%22certificate_age%22%5D%5D%5D"
+query = "?query=%5B%22from%22%2C%22facts%22%2C%5B%22extract%22%2C%5B%22certname%22%2C%22value%22%5D%2C%5B%22%3D%22%2C%22name%22%2C%22auto_certificate_age%22%5D%5D%5D"
 uri = query_url + query
 
 # This section generates a token for authentication
