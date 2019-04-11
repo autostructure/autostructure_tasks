@@ -1,4 +1,5 @@
 require 'yaml/store'
+require 'fileutils'
 
 # This fact returns a hash based on the age of the agents SSL certificate
 Facter.add('auto_certificate_age') do
@@ -11,6 +12,7 @@ Facter.add('auto_certificate_age') do
         'month' => creation_time.month,
         'day' => creation_time.day,
       }
+      FileUtils.mkdir_p facter_dir unless File.exist?(facter_dir)
       fact_file = YAML::Store.new("#{facter_dir}/birthday.yaml")
       fact_file.transaction do
         fact_file['auto_certificate_age'] = time_hash
