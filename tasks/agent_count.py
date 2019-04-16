@@ -121,6 +121,8 @@ try:
 
     Final.to_csv(path_or_buf=file,index=False)
 
+    csv_file = csv.reader(open(file))
+
     sum_2019 = 0
     sum_2018 = 0
     sum_2017 = 0
