@@ -128,11 +128,11 @@ try:
     sum_2017 = 0
     for row in csv_file:
         if row[1] == '2019':
-            sum_2019 += row[2]
+            sum_2019 += int(row[2])
         if row[1] == '2018':
-            sum_2018 += row[2]
+            sum_2018 += int(row[2])
         if row[1] == '2017':
-            sum_2017 += row[2]
+            sum_2017 += int(row[2])
     with open(file, 'a') as f:
         writer = csv.writer(f)
         writer.writerow(['Total', '2019', sum_2019])
