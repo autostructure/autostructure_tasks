@@ -120,6 +120,23 @@ try:
     file = "/tmp/agent_count_" + date + ".csv"
 
     Final.to_csv(path_or_buf=file,index=False)
+
+    sum_2019 = 0
+    sum_2018 = 0
+    sum_2017 = 0
+    for row in csv_file:
+        if row[1] == '2019':
+            sum_2019 += row[2]
+        if row[1] == '2018':
+            sum_2018 += row[2]
+        if row[1] == '2017':
+            sum_2017 += row[2]
+    with open(file, 'a') as f:
+        writer = csv.writer(f)
+        writer.writerow(['Total', '2019', sum_2019])
+        writer.writerow(['Total', '2018', sum_2018])
+        writer.writerow(['Total', '2017', sum_2017])
+
 except Exception as e:
     print("Error creating dataframe: " + str(e))
     sys.exit(1)
