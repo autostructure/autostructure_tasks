@@ -104,7 +104,7 @@ try:
     df2['Month'] = df['value.:month']
     df2['Year'] = df['value.:year']
     df2['Puppet Licenses'] = df['certname']
-    df2 = df2.groupby(by=['Month','Year'], as_index=False).agg({'Agents': pd.Series.nunique})
+    df2 = df2.groupby(by=['Month','Year'], as_index=False).agg({'Puppet Licenses': pd.Series.nunique})
 
     #Convert numbers to month abbreviations for clarity
     look_up = { 1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May',
