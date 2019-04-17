@@ -103,7 +103,7 @@ try:
     df2 = pd.DataFrame()
     df2['Month'] = df['value.:month']
     df2['Year'] = df['value.:year']
-    df2['Agents'] = df['certname']
+    df2['Puppet Licenses'] = df['certname']
     df2 = df2.groupby(by=['Month','Year'], as_index=False).agg({'Agents': pd.Series.nunique})
 
     #Convert numbers to month abbreviations for clarity
@@ -138,6 +138,7 @@ try:
         writer.writerow(['Total', '2019', sum_2019])
         writer.writerow(['Total', '2018', sum_2018])
         writer.writerow(['Total', '2017', sum_2017])
+        writer.writerow(['Total', 'All Years', sum_2017 + sum_2018 + sum_2019])
 
 except Exception as e:
     print("Error creating dataframe: " + str(e))
