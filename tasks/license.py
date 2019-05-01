@@ -42,7 +42,7 @@ def sendMail(to, fro, subject, text, files=[],server="localhost"):
 params = json.load(sys.stdin)
 email_to = params['email']
 query_url = "https://master.autostructure.io:8081/pdb/query/v4"
-query = "?query=nodes%5Bcount()%5D"
+query = "?query=nodes%5Bcount%28%29%5D"
 uri = query_url + query
 
 # This section generates a token for authentication
