@@ -1,0 +1,20 @@
+{
+  "puppet_task_version": 1,
+  "supports_noop": false,
+  "description": "A short description of this task",
+  "parameters": {
+    "email": {
+      "description": "The email to send the report to.",
+      "type": "String[1]"
+    },
+    "user": {
+      "description": "User Name used to generate authentication token",
+      "type": "String[1]"
+    },
+    "password": {
+      "description": "Password for authentication",
+      "type": "String[1]",
+      "sensitive": true
+    }
+  }
+}
