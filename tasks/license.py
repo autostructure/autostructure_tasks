@@ -92,9 +92,9 @@ else:
     print("Data not successfully retrieved from PuppetDB")
     print("HTTP Status Code:",response.status_code)
 license_json = json.loads(response.text)
-license_count = license_json[0]['count']
+#license_count = license_json[0]['count']
 
-print(count)
+print(license_json)
 
 # Convert the JSON data to CSV format and save in a temporary file
 # date = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
