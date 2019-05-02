@@ -92,7 +92,7 @@ else:
     print("Data not successfully retrieved from PuppetDB")
     print("HTTP Status Code:",response.status_code)
 license_json = json.loads(response.text)
-license_count = license_json['count']
+license_count = license_json[0]['count']
 
 print(count)
 
